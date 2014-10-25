@@ -116,6 +116,10 @@ app.get('/', function (req, res, next) {
     }
 });
 
+/**
+ *  GROUPS
+ */
+
 app.post('/addGroup', function (req, res) {
     var sql = "INSERT INTO groups (group_name, group_owner_id) VALUES (?, ?);";
     var insert = [req.body.name, req.body.owner_id];
@@ -180,8 +184,8 @@ app.post('/removeUserFromGroup', function (req, res) {
 });
 
 app.get('/getGroups', function (req, res) {
-    var sql = "SELECT * FROM groups WHERE group_owner_id = ? AND archived != true;";
-    var insert = [req.body.owner_id];
+    var sql = "SELECT * FROM groups WHERE group_owner_id = ? AND archived is null;";
+    var insert = [req.query.owner_id];
     sql = mysql.format(sql, insert);
 
     var connection = mysql.createConnection(mysql_config);
@@ -196,6 +200,246 @@ app.get('/getGroups', function (req, res) {
     });
     connection.end();
 });
+
+/**
+ * PROJECTS
+ */
+
+app.post('/addProjectToGroup', function (req, res) {
+    var sql = "INSERT INTO projects (project_name, group_id) VALUES (?, ?);";
+    var insert = [req.body.project_name, req.body.group_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results.insertId);
+        }
+    });
+    connection.end();
+});
+
+app.post('/addUserToProject', function (req, res) {
+    var sql = "INSERT INTO users_projects (user_id, project_id) VALUES (?, ?);";
+    var insert = [req.body.user_id, req.body.project_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.post('/removeUserFromProject', function (req, res) {
+    var sql = "UPDATE users_projects SET archived = true WHERE user_id = ? AND project_id = ?";
+    var insert = [req.body.user_id, req.body.project_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.get('/getProjectsFromGroup', function (req, res) {
+    var sql = "SELECT * FROM projects WHERE group_id = ? AND archived is null;";
+    var insert = [req.query.group_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.get('/getProjectsFromUser', function (req, res) {
+    var sql = "SELECT * FROM users_projects WHERE user_id = ? AND archived is null;";
+    var insert = [req.query.user_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+/**
+ * TASKS
+ */
+
+app.post('/addTaskToProject', function (req, res) {
+    var sql = "INSERT INTO tasks (task_name, project_id) VALUES (?, ?);";
+    var insert = [req.body.task_name, req.body.project_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results.insertId);
+        }
+    });
+    connection.end();
+});
+
+app.post('/addUserToTask', function (req, res) {
+    var sql = "INSERT INTO users_tasks (user_id, task_id) VALUES (?, ?);";
+    var insert = [req.body.user_id, req.body.task_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.post('/removeUserFromTask', function (req, res) {
+    var sql = "UPDATE users_tasks SET archived = true WHERE user_id = ? AND task_id = ?";
+    var insert = [req.body.user_id, req.body.task_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.get('/getTasksFromProject', function (req, res) {
+    var sql = "SELECT * FROM tasks WHERE project_id = ? AND archived is null;";
+    var insert = [req.query.project_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.get('/getTasksFromUser', function (req, res) {
+    var sql = "SELECT * FROM users_tasks WHERE user_id = ? AND archived is null;";
+    var insert = [req.query.user_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+/**
+ * STATUS
+ */
+
+app.post('/setStatusForUser', function (req, res) {
+    var sql = "UPDATE users SET status_message = ? WHERE user_id = ?";
+    var insert = [req.body.status_message, req.body.user_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.post('/setStatusForUserWithEndtime', function (req, res) {
+    var sql = "UPDATE users SET status_message = ?, status_endtime = ? WHERE user_id = ?";
+    var insert = [req.body.status_message, req.body.status_endtime, req.body.user_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+/**
+ * IMPORT FROM TRELLO
+ */
+
+app.get('/importFromTrello', function (req, res) {
+    res.json([]);
+});
+
+/**
+ * USER AUTH
+ */
 
 app.post('/login', passport.authenticate('local-user'), function (req, res) {
     res.json(req.user);
