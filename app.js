@@ -429,6 +429,24 @@ app.post('/setStatusForUserWithEndtime', function (req, res) {
     connection.end();
 });
 
+app.get('/getStatusOfUser', function (req, res) {
+    var sql = "SELECT * FROM users_tasks WHERE user_id = ? AND archived is null;";
+    var insert = [req.query.user_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
 /**
  * IMPORT FROM TRELLO
  */
