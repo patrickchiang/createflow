@@ -1,0 +1,124 @@
+body {
+    background-color: #cdddf9;
+    font-family: "Consolas";
+}
+
+.nospace {
+    margin: 0;
+    padding: 0;
+}
+
+.panel-link {
+    display: block;
+    padding: 10px 15px;
+}
+
+#accordion .panel-heading {
+    padding: 0;
+}
+
+#accordion {
+    margin: 3em;
+    padding: 0;
+}
+
+.problem-right {
+    overflow-y: auto;
+    height: 100vh;
+}
+
+.logo, .scoreboard {
+    display: block;
+}
+
+.logo {
+    margin: 2em auto;
+}
+
+.scoreboard {
+    text-align: center;
+}
+
+.profile {
+    font-size: 1.2em;
+    border: dashed #000000 0.4em;
+    overflow: hidden;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.stats {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1em;
+
+    display: block;
+    text-align: center;
+    padding: 0;
+    list-style-type: none;
+}
+
+.controls {
+    margin: 2em auto;
+    text-align: center;
+}
+
+.prompt, .answer {
+    margin: 0;
+    padding: 0;
+}
+
+.prompt {
+    margin-top: 1em;
+}
+
+.expected, .actual {
+    margin: 0;
+    padding: 0;
+}
+
+.form-control {
+    padding-left: 3em;
+}
+
+.run-button {
+    margin-top: 1em;
+    float: right;
+}
+
+.status, .points {
+    float: right;
+    margin-left: 1em;
+}
+
+.navigate {
+    padding: 0;
+    margin-top: 1em;
+    overflow: hidden;
+}
+
+.next {
+    float: right;
+}
+
+.previous a, .next a {
+    color: #333;
+}
+
+.well {
+    padding-left: 2em;
+}
+
+.debug-danger {
+    background-color: #d9534f;
+    color: white;
+}
+
+.debug-success {
+    background-color: #5cb85c;
+    color: white;
+}
+
+a.red-color {
+    color: red;
+}

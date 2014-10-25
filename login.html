@@ -1,0 +1,48 @@
+<!DOCTYPE html5>
+<html>
+<head>
+    <title>CreateFlow - Login</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/modal.css" rel="stylesheet">
+</head>
+<body>
+<!--login modal-->
+<div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-center">Login</h1>
+            </div>
+            <div class="modal-body">
+
+                <div class="well"></div>
+
+                <form class="form col-md-12 center-block">
+                    <div class="form-group">
+                        <input type="email" class="form-control input-lg" name="email" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control input-lg" name="pass" placeholder="Password">
+                    </div>
+                    <div class="form-group register-show">
+                        <input type="text" class="form-control input-lg" name="first" placeholder="First Name">
+                    </div>
+                    <div class="form-group register-show">
+                        <input type="text" class="form-control input-lg" name="last" placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-lg btn-block sign-in-btn">Sign In</button>
+                        <span class="pull-right"><a href="#" class="register-link">Register</a></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>
