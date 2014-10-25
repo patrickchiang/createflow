@@ -51,13 +51,32 @@ FOREIGN KEY (user_id) REFERENCES users(user_id),
 FOREIGN KEY (status_id) REFERENCES status(status_id)
 );
 
+CREATE TABLE chats
+(
+chat_id int NOT NULL,
+PRIMARY KEY (chat_id)
+);
+
+CREATE TABLE messages
+(
+message_id int NOT NULL,
+chat_id int NOT NULL,
+author_user_id int NOT NULL,
+message_text varchar(512),
+PRIMARY KEY (message_id),
+FOREIGN KEY (chat_id) REFERENCES chats(chat_id),
+FOREIGN KEY (author_user_id) REFERENCES users(user_id)
+);
+
 CREATE TABLE projects
 (
 project_id int NOT NULL AUTO_INCREMENT,
 group_id int NOT NULL,
 project_name varchar(64) NOT NULL,
+chat_id int,
 PRIMARY KEY (project_id),
-FOREIGN KEY (group_id) REFERENCES groups(group_id)
+FOREIGN KEY (group_id) REFERENCES groups(group_id),
+FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
 );
 
 CREATE TABLE users_projects
@@ -74,8 +93,10 @@ CREATE TABLE tasks
 task_id int NOT NULL AUTO_INCREMENT,
 project_id int NOT NULL,
 task_name varchar(64) NOT NULL,
+chat_id int,
 PRIMARY KEY (task_id),
-FOREIGN KEY (project_id) REFERENCES projects(project_id)
+FOREIGN KEY (project_id) REFERENCES projects(project_id),
+FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
 );
 
 CREATE TABLE users_tasks
