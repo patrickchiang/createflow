@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="604a550a-91b4-4c0a-a363-4bb367246208" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/init.sql" afterPath="$PROJECT_DIR$/init.sql" />
     </list>
     <ignored path="createflow.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +29,8 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.37125748" vertical-offset="2649" max-vertical-offset="4140">
-              <caret line="189" column="18" selection-start-line="189" selection-start-column="18" selection-end-line="189" selection-end-column="18" />
+            <state vertical-scroll-proportion="2.0778444" vertical-offset="1674" max-vertical-offset="4140">
+              <caret line="181" column="20" selection-start-line="181" selection-start-column="20" selection-end-line="181" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -1098,8 +1097,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37125748" vertical-offset="2649" max-vertical-offset="4140">
-          <caret line="189" column="18" selection-start-line="189" selection-start-column="18" selection-end-line="189" selection-end-column="18" />
+        <state vertical-scroll-proportion="2.0778444" vertical-offset="1674" max-vertical-offset="4140">
+          <caret line="181" column="20" selection-start-line="181" selection-start-column="20" selection-end-line="181" selection-end-column="20" />
           <folding />
         </state>
       </provider>

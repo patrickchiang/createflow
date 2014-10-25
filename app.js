@@ -179,7 +179,7 @@ app.post('/removeUserFromGroup', function (req, res) {
     connection.end();
 });
 
-app.get('/getGroups', ensureAuthenticated, function (req, res) {
+app.get('/getGroups', function (req, res) {
     var sql = "SELECT * FROM groups WHERE group_owner_id = ? AND archived != true;";
     var insert = [req.body.owner_id];
     sql = mysql.format(sql, insert);
