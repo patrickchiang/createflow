@@ -116,6 +116,87 @@ app.get('/', function (req, res, next) {
     }
 });
 
+app.post('/addGroup', function (req, res) {
+    var sql = "INSERT INTO groups (group_name, group_owner_id) VALUES (?, ?);";
+    var insert = [req.body.name, req.body.owner_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            var sql1 = "INSERT INTO users_groups (user_id, group_id) VALUES (?, ?);";
+            var insert1 = [req.body.owner_id, results.insertId];
+            sql1 = mysql.format(sql1, insert1);
+
+            var connection1 = mysql.createConnection(mysql_config);
+            connection1.connect();
+            connection1.query(sql1, function (err, results1) {
+                res.json(results.insertId);
+            });
+            connection1.end();
+        }
+    });
+    connection.end();
+});
+
+app.post('/addUserToGroup', function (req, res) {
+    var sql = "INSERT INTO users_groups (user_id, group_id) VALUES (?, ?);";
+    var insert = [req.body.user_id, req.body.group_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.post('/removeUserFromGroup', function (req, res) {
+    var sql = "UPDATE users_groups SET archived = true WHERE user_id = ? AND group_id = ?";
+    var insert = [req.body.user_id, req.body.group_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.get('/getGroups', ensureAuthenticated, function (req, res) {
+    var sql = "SELECT * FROM groups WHERE group_owner_id = ? AND archived != true;";
+    var insert = [req.body.owner_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
 app.post('/login', passport.authenticate('local-user'), function (req, res) {
     res.json(req.user);
 });
