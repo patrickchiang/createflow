@@ -483,9 +483,7 @@ app.post('/register', function (req, res) {
             res.json(err);
         }
         else {
-            passport.authenticate('local-user')(req, res, function () {
-                res.redirect('/');
-            });
+            res.json(['Successful connection']);
         }
     });
     connection.end();
