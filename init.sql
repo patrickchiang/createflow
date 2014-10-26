@@ -114,10 +114,10 @@ INSERT INTO projects (project_name, group_id, project_desc, project_endtime) VAL
 INSERT INTO users_projects (user_id, project_id) VALUES (1, 1);
 INSERT INTO users_projects (user_id, project_id) VALUES (2, 1);
 
-INSERT INTO projects (project_name, group_id, project_desc, project_endtime) VALUES ('The Manhattan Project 2', 1, 'We are building a top secret nuclear bomb.', '2014-11-24 10:32:18');
+INSERT INTO projects (project_name, group_id, project_desc, project_endtime) VALUES ('Backyard Treehouse', 1, 'The most ambitious treehouse construction project in tree history', '2014-12-20 10:32:18');
 INSERT INTO users_projects (user_id, project_id) VALUES (1, 2);
 
 INSERT INTO tasks (task_name, project_id) VALUES ('Enrich some of that delicious Uranium', '1'), ('Mix some of that awesome sauce.', '1'), ('Find the right backyard to test our not-bomb.', '1');
 INSERT INTO users_tasks (user_id, task_id) VALUES (1, 1), (1, 2), (2, 1), (2, 3);
 
-INSERT INTO tasks (task_name, project_id) VALUES ('Enrich some of that delicious Uranium', '1'), ('Mix some of that awesome sauce.', '1'), ('Find the right backyard to test our not-bomb.', '1');
+INSERT INTO tasks (task_name, project_id) VALUES ('Collect some lumber from local lumber yard', '2'), ('Draw up the schematics and validate its ', '2'), ('Find the right backyard to test our not-bomb.', '2');
