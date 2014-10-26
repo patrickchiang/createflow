@@ -16,6 +16,7 @@ body {
     float: right;
     width: 25px;
     height: 25px;
+    cursor: pointer;
 }
 
 .projects, .tasks {
@@ -54,6 +55,14 @@ body {
     padding: 2em 2em 0.5em;
     margin: 0;
     text-align: left;
+    overflow: hidden;
+    clear: both;
+    cursor: pointer;
+}
+
+.users {
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
 
 .time-to-milestone {
@@ -64,7 +73,7 @@ body {
 
 .project-name {
     color: #4d5d68;
-    font-size: 40pt;
+    font-size: 20pt;
     overflow: hidden;
 }
 
@@ -77,6 +86,7 @@ body {
     height: 70px;
     width: 70px;
     display: inline-block;
+    margin-right: 20px;
 }
 
 .bottom-right {
@@ -93,15 +103,17 @@ body {
 }
 
 .bottom-right:after {
-    content : "";
+    content: "";
     display: block;
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('../images/car.jpg');
-    width: 100%;
-    height: 100%;
-    opacity : 0.2;
+    background-image: url('../images/manhattan.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 66.6vw;
+    height: 100vh;
+    opacity: 0.1;
     z-index: -1;
 }
 
@@ -111,7 +123,7 @@ body {
 }
 
 .title-right {
-    font-size: 42pt;
+    font-size: 32pt;
     color: #5c6266;
     text-align: left;
     display: inline;
@@ -122,7 +134,8 @@ body {
 .time-to-milestone-right {
     font-size: 10pt;
     float: right;
-    margin: 30px;
+    margin-top: 30px;
+    margin-right: 30px;
 }
 
 .tagline {
@@ -139,17 +152,21 @@ body {
 }
 
 .task-item-title {
-    display: inline-block;
+    display: block;
     text-align: left;
 }
 
 .profile-picture-lg {
     height: 76px;
     width: 76px;
-    display: block;
     padding: 0;
+    margin-left: 10px;
     float: right;
-    background-color: red;
+}
+
+.profile-picture-lg img {
+    height: 76px;
+    width: 76px;
 }
 
 .options {
@@ -162,6 +179,16 @@ body {
 
 .delete {
     float: right;
-    margin-top: -30px;
-    margin-right: -25px;
+    margin-top: -20px;
+    margin-right: -20px;
+}
+
+.delete img {
+    width: 15px;
+    height: 15px;
+}
+
+input {
+    display: block;
+    margin-bottom: 10px;
 }

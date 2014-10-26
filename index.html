@@ -1,122 +1,97 @@
 <!DOCTYPE html5>
-<html>
+<html ng-app="createflow">
 <head>
     <title>CreateFlow</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <link href="css/problems.css" rel="stylesheet">
 </head>
-<body>
+<body ng-controller="IndexController">
+<div class="modal fade" id="createTheProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Create New Project</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" ng-model="new_project_name" size="30" placeholder="Project Name">
+                <input type="text" ng-model="new_project_tagline" size="30" placeholder="Project Description">
+                Date of Next Milestone: <input type="date" ng-model="new_project_endtime" size="30">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        ng-click="createProject(new_project_name, new_project_tagline, new_project_endtime)">Create
+                    Project
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createTheTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Create New Task</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" ng-model="new_task_name" size="30" placeholder="Task Name">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        ng-click="createTask(new_task_name, currentProject.project_id)">Create
+                    Project
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="col-md-4 projects">
     <div class="top-left-bar">
         <span class="title-left">Projects</span>
-        <img src="images/+.png" alt="plus sign" class="add">
+        <img src="images/+.png" alt="plus sign" class="add" data-toggle="modal" data-target="#createTheProject">
     </div>
-    <div class="bottom-left">
-        <div class="delete">X</div>
-        <div class="time-to-milestone">3 days</div>
-        <div class="project-name">Name</div>
-        <div class="project-desc">Project description here</div>
+    <div class="bottom-left" ng-repeat="project in userProjects" ng-mouseenter="hoverProject(project)"
+         ng-mouseleave="hoverProject(project)" ng-click="clickProject(project)">
+        <div class="delete" ng-show="project.showDelete" ng-click="deleteProject($index, project.project_id)"><img
+                ng-src="/images/x.png"></div>
+        <div class="time-to-milestone">{{timeToDeadline(project.project_endtime)}} days</div>
+        <div class="project-name">{{project.project_name}}</div>
+        <div class="project-desc">{{project.project_desc}}</div>
         <div class="users">
-            <div class="profile-picture"></div>
-            <div class="profile-picture"></div>
-            <div class="profile-picture"></div>
-        </div>
-    </div>
-    <div class="bottom-left">
-        <div class="delete">X</div>
-        <div class="time-to-milestone">10 days</div>
-        <div class="project-name">Name</div>
-        <div class="project-desc">Project description here</div>
-        <div class="users">
-            <div class="profile-picture"></div>
-            <div class="profile-picture"></div>
-            <div class="profile-picture"></div>
-        </div>
-    </div>
-    <div class="bottom-left">
-        <div class="delete">X</div>
-        <div class="time-to-milestone">5 days</div>
-        <div class="project-name">Name</div>
-        <div class="project-desc">Project description here</div>
-        <div class="users">
-            <div class="profile-picture"></div>
-            <div class="profile-picture"></div>
-            <div class="profile-picture"></div>
+            <div class="profile-picture" ng-repeat="user in project.users">
+                <img ng-src="/{{user.profile_picture}}" class="profile-picture">
+            </div>
         </div>
     </div>
 </div>
 <div class="col-md-8 tasks">
     <div class="top-right-bar">
-        <img src="images/+.png" alt="plus sign" class="add">
+        <img src="images/+.png" alt="plus sign" class="add" data-toggle="modal" data-target="#createTheTask">
     </div>
     <div class="bottom-right">
         <div class="bottom-right-modal">
             <div class="bottom-right-title">
-                <span class="time-to-milestone-right">10 days til milestone</span>
-                <span class="title-right">Project Title</span>
-                <span class="tagline">Tagline Tagline Tagline Tagline </span>
+                <span class="time-to-milestone-right">{{timeToDeadline(currentProject.project_endtime)}} days til next milestone</span>
+                <span class="title-right">{{currentProject.project_name}}</span>
+                <span class="tagline">{{currentProject.project_desc}}</span>
             </div>
-            <div class="task-item">
-                <div class="task-item-title col-sm-10">Task Item Title Task Item Title Task Item Title Task Item Title
-                    Task Item Title
+            <div class="task-item" ng-repeat="task in currentProject.tasks">
+                <div class="profile-picture-lg" ng-repeat="userImage in task.users">
+                    <img ng-src="/{{userImage.profile_picture}}">
                 </div>
-                <div class="profile-picture-lg col-sm-2"></div>
-                <a class="options" href="">View Task</a>
-                <a class="options" href="">Add Me</a>
-                <a class="options" href="">Move to Backlog</a>
-            </div>
-            <div class="task-item">
-                <div class="task-item-title col-md-10">Task Item Title Task Item Title Task Item Title Task Item Title
-                    Task Item Title
+
+                <div class="task-item-title">
+                    {{task.task_name}}
                 </div>
-                <div class="profile-picture-lg col-md-2"></div>
-                <a class="options" href="">View Task</a>
-                <a class="options" href="">Add Me</a>
-                <a class="options" href="">Move to Backlog</a>
-            </div>
-            <div class="task-item">
-                <div class="task-item-title col-md-10">Task Item Title Task Item Title Task Item Title Task Item Title
-                    Task Item Title
-                </div>
-                <div class="profile-picture-lg col-md-2"></div>
-                <a class="options" href="">View Task</a>
-                <a class="options" href="">Add Me</a>
-                <a class="options" href="">Move to Backlog</a>
-            </div>
-            <div class="task-item">
-                <div class="task-item-title col-md-10">Task Item Title Task Item Title Task Item Title Task Item Title
-                    Task Item Title
-                </div>
-                <div class="profile-picture-lg col-md-2"></div>
-                <a class="options" href="">View Task</a>
-                <a class="options" href="">Add Me</a>
-                <a class="options" href="">Move to Backlog</a>
-            </div>
-            <div class="task-item">
-                <div class="task-item-title col-md-10">Task Item Title Task Item Title Task Item Title Task Item Title
-                    Task Item Title
-                </div>
-                <div class="profile-picture-lg col-md-2"></div>
-                <a class="options" href="">View Task</a>
-                <a class="options" href="">Add Me</a>
-                <a class="options" href="">Move to Backlog</a>
-            </div>
-            <div class="task-item">
-                <div class="task-item-title col-md-10">Task Item Title Task Item Title Task Item Title Task Item Title
-                    Task Item Title
-                </div>
-                <div class="profile-picture-lg col-md-2"></div>
-                <a class="options" href="">View Task</a>
-                <a class="options" href="">Add Me</a>
-                <a class="options" href="">Move to Backlog</a>
-            </div>
-            <div class="task-item">
-                <div class="task-item-title col-md-10">Task Item Title Task Item Title Task Item Title Task Item Title
-                    Task Item Title
-                </div>
-                <div class="profile-picture-lg col-md-2"></div>
+
                 <a class="options" href="">View Task</a>
                 <a class="options" href="">Add Me</a>
                 <a class="options" href="">Move to Backlog</a>
@@ -127,6 +102,7 @@
 
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/login.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>

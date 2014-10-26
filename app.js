@@ -5,6 +5,7 @@ var bcrypt = require('bcrypt-nodejs');
 var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var multer = require('multer');
 
 var app = express();
 var mysql_config = {
@@ -15,6 +16,8 @@ var mysql_config = {
     database: 'createflow',
     multipleStatements: true
 };
+
+app.use(multer({dest: './images/'}));
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -61,7 +64,8 @@ passport.use('local-user', new LocalStrategy({
                         user_id: user.user_id,
                         first_name: user.first_name,
                         last_name: user.last_name,
-                        email: user.email
+                        email: user.email,
+                        profile_picture: user.profile_picture
                     });
                 }
                 return done(null, false);
@@ -206,8 +210,8 @@ app.get('/getGroups', function (req, res) {
  */
 
 app.post('/addProjectToGroup', function (req, res) {
-    var sql = "INSERT INTO projects (project_name, group_id) VALUES (?, ?);";
-    var insert = [req.body.project_name, req.body.group_id];
+    var sql = "INSERT INTO projects (project_name, group_id, project_desc, project_endtime) VALUES (?, ?, ?, ?);";
+    var insert = [req.body.project_name, req.body.group_id, req.body.project_desc, req.body.project_endtime];
     sql = mysql.format(sql, insert);
 
     var connection = mysql.createConnection(mysql_config);
@@ -259,6 +263,25 @@ app.post('/removeUserFromProject', function (req, res) {
     connection.end();
 });
 
+app.post('/removeProject', function (req, res) {
+    var sql = "UPDATE projects SET archived = true WHERE project_id = ?";
+    var insert = [req.body.project_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            console.log(results);
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
 app.get('/getProjectsFromGroup', function (req, res) {
     var sql = "SELECT * FROM projects WHERE group_id = ? AND archived is null;";
     var insert = [req.query.group_id];
@@ -280,6 +303,44 @@ app.get('/getProjectsFromGroup', function (req, res) {
 app.get('/getProjectsFromUser', function (req, res) {
     var sql = "SELECT * FROM users_projects WHERE user_id = ? AND archived is null;";
     var insert = [req.query.user_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.get('/getProjectsForUser', function (req, res) {
+    var responseHere = [];
+
+    var sql = "SELECT * FROM users_projects up JOIN projects p ON up.project_id = p.project_id WHERE up.user_id = ? AND up.archived is null AND p.archived is null;";
+    var insert = [req.user.user_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.get('/getUsersForProject', function (req, res) {
+    var sql = "SELECT u.* FROM users_projects up JOIN users u ON up.user_id = u.user_id WHERE up.project_id = ?;";
+    var insert = [req.query.project_id];
     sql = mysql.format(sql, insert);
 
     var connection = mysql.createConnection(mysql_config);
@@ -389,6 +450,24 @@ app.get('/getTasksFromUser', function (req, res) {
     connection.end();
 });
 
+app.get('/getUsersForTask', function (req, res) {
+    var sql = "SELECT u.* FROM users_tasks ut JOIN users u ON ut.user_id = u.user_id WHERE ut.task_id = ?;";
+    var insert = [req.query.task_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
 /**
  * STATUS
  */
@@ -456,8 +535,38 @@ app.get('/importFromTrello', function (req, res) {
 });
 
 /**
+ * IMAGE UPLOADS
+ */
+
+app.post('/uploadImage', function (req, res) {
+    var sql = "UPDATE users SET profile_picture = ? WHERE user_id = ?";
+    var insert = [req.files.displayImage.path, req.user.user_id];
+    sql = mysql.format(sql, insert);
+
+    var connection = mysql.createConnection(mysql_config);
+    connection.connect();
+    connection.query(sql, function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else if (results != null) {
+            res.json(results);
+        }
+    });
+    connection.end();
+});
+
+app.get('/getProfileImage', function (req, res) {
+    res.json(req.user.profile_picture);
+});
+
+/**
  * USER AUTH
  */
+
+app.get('/currentUser', ensureAuthenticated, function (req, res) {
+    res.json(req.user);
+});
 
 app.post('/login', passport.authenticate('local-user'), function (req, res) {
     res.json(req.user);
