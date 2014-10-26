@@ -14,6 +14,7 @@ password varchar(128) NOT NULL,
 user_type varchar(128),
 status_message varchar(512),
 status_endtime datetime,
+profile_picture varchar(128),
 PRIMARY KEY (user_id),
 CONSTRAINT unique_users UNIQUE (email),
 CONSTRAINT unique_name UNIQUE (first_name, last_name)

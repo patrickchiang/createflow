@@ -472,6 +472,7 @@ app.post('/login-admin', passport.authenticate('local-admin'), function (req, re
 });
 
 app.post('/register', function (req, res) {
+    console.log(req.body);
     var sql = "INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?);";
     var insert = [req.body.first, req.body.last, req.body.email, bcrypt.hashSync(req.body.pass)];
     sql = mysql.format(sql, insert);
